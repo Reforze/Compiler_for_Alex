@@ -33,7 +33,7 @@ Token Parser::advance() {
 
 Token Parser::consume(TokenKind k, const std::string& what) {
     if (!check(k)) {
-        addError("expected " + what + " but got '" + current().text + "'");
+        addError("ожидалось " + what + ", получено '" + current().text + "'");
         // return a dummy token so parsing can limp along
         return Token(k, "", current().line, current().col);
     }
@@ -41,8 +41,8 @@ Token Parser::consume(TokenKind k, const std::string& what) {
 }
 
 void Parser::addError(const std::string& msg) {
-    errors.push_back("Parser error at line " + std::to_string(current().line) +
-                     ", col " + std::to_string(current().col) + ": " + msg);
+    errors.push_back("[" + std::to_string(current().line) + ":" + std::to_string(current().col) +
+                     "] Синтаксическая ошибка: " + msg);
 }
 
 void Parser::synchronize() {
@@ -423,7 +423,7 @@ std::unique_ptr<Expr> Parser::parsePrimary() {
     }
 
     // Error: unexpected token
-    addError("unexpected token '" + current().text + "' in expression");
+    addError("неожиданный токен '" + current().text + "' в выражении");
     // Return a dummy node so we can continue
     auto e = std::make_unique<Expr>();
     e->kind = ExprKind::IntLit; e->line = ln; e->col = cl;

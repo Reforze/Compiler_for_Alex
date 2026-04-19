@@ -19,8 +19,8 @@ char Lexer::advance() {
 }
 
 void Lexer::addError(const std::string& msg) {
-    errors.push_back("Lexer error at line " + std::to_string(line_) +
-                     ", col " + std::to_string(col_) + ": " + msg);
+    errors.push_back("[" + std::to_string(line_) + ":" + std::to_string(col_) +
+                     "] Лексическая ошибка: " + msg);
 }
 
 void Lexer::skipWhitespaceAndComments() {
@@ -45,9 +45,8 @@ void Lexer::skipWhitespaceAndComments() {
                 advance();
             }
             if (!closed) {
-                errors.push_back("Lexer error at line " + std::to_string(startLine) +
-                                 ", col " + std::to_string(startCol) +
-                                 ": unterminated block comment");
+                errors.push_back("[" + std::to_string(startLine) + ":" + std::to_string(startCol) +
+                                 "] Лексическая ошибка: незакрытый блочный комментарий");
             }
         } else {
             break;
@@ -69,13 +68,13 @@ Token Lexer::readChar() {
     advance(); // consume opening '
     char val = '\0';
     if (pos_ >= src_.size()) {
-        addError("unterminated character literal");
+        addError("незакрытый символьный литерал");
         return Token(TokenKind::CharLit, "", startLine, startCol);
     }
     if (peek() == '\\') {
         advance(); // consume backslash
         if (pos_ >= src_.size()) {
-            addError("unterminated escape sequence");
+            addError("незакрытая escape-последовательность");
             return Token(TokenKind::CharLit, std::string(1, val), startLine, startCol);
         }
         char esc = advance();
@@ -87,14 +86,14 @@ Token Lexer::readChar() {
             case '\'': val = '\''; break;
             case '0':  val = '\0'; break;
             default:
-                addError(std::string("unknown escape sequence '\\") + esc + "'");
+                addError(std::string("неизвестная escape-последовательность '\\") + esc + "'");
                 val = esc;
         }
     } else {
         val = advance();
     }
     if (pos_ >= src_.size() || peek() != '\'') {
-        addError("expected closing ' in character literal");
+        addError("ожидалась закрывающая ' в символьном литерале");
     } else {
         advance(); // consume closing '
     }
@@ -190,7 +189,7 @@ std::vector<Token> Lexer::tokenize() {
                 break;
 
             default:
-                addError(std::string("unexpected character '") + c + "'");
+                addError(std::string("неожиданный символ '") + c + "'");
                 break;
         }
     }

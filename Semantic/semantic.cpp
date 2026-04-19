@@ -4,8 +4,8 @@
 SemanticAnalyzer::SemanticAnalyzer() {}
 
 void SemanticAnalyzer::addError(const std::string& msg, int line, int col) {
-    errors.push_back("Semantic error at line " + std::to_string(line) +
-                     ", col " + std::to_string(col) + ": " + msg);
+    errors.push_back("[" + std::to_string(line) + ":" + std::to_string(col) +
+                     "] Семантическая ошибка: " + msg);
 }
 
 void SemanticAnalyzer::analyze(ProgramNode& prog) {
@@ -23,7 +23,7 @@ void SemanticAnalyzer::analyzeStmt(Stmt& stmt) {
 
     case StmtKind::VarDecl: {
         if (symbols_.count(stmt.varName)) {
-            addError("variable '" + stmt.varName + "' already declared",
+            addError("переменная '" + stmt.varName + "' уже объявлена",
                      stmt.line, stmt.col);
         }
         symbols_[stmt.varName] = stmt.typeName;
@@ -34,8 +34,8 @@ void SemanticAnalyzer::analyzeStmt(Stmt& stmt) {
                 // Allow int<->bool assignment silently (common pattern)
                 if (!((stmt.typeName == "int"  && initType == "bool") ||
                       (stmt.typeName == "bool" && initType == "int"))) {
-                    addError("type mismatch in initialiser: expected '" + stmt.typeName +
-                             "', got '" + initType + "'",
+                    addError("несовпадение типов в инициализаторе: ожидался '" + stmt.typeName +
+                             "', получен '" + initType + "'",
                              stmt.initExpr->line, stmt.initExpr->col);
                 }
             }
@@ -45,7 +45,7 @@ void SemanticAnalyzer::analyzeStmt(Stmt& stmt) {
 
     case StmtKind::Assign: {
         if (!symbols_.count(stmt.varName)) {
-            addError("undeclared variable '" + stmt.varName + "'",
+            addError("необъявленная переменная '" + stmt.varName + "'",
                      stmt.line, stmt.col);
         }
         if (stmt.valueExpr) {
@@ -55,8 +55,8 @@ void SemanticAnalyzer::analyzeStmt(Stmt& stmt) {
                 if (rhs != lhsType) {
                     if (!((lhsType == "int"  && rhs == "bool") ||
                           (lhsType == "bool" && rhs == "int"))) {
-                        addError("type mismatch in assignment: variable '" + stmt.varName +
-                                 "' is '" + lhsType + "', got '" + rhs + "'",
+                        addError("несовпадение типов в присваивании: переменная '" + stmt.varName +
+                                 "' имеет тип '" + lhsType + "', получен '" + rhs + "'",
                                  stmt.valueExpr->line, stmt.valueExpr->col);
                     }
                 }
@@ -94,7 +94,7 @@ void SemanticAnalyzer::analyzeStmt(Stmt& stmt) {
 
     case StmtKind::Read: {
         if (!symbols_.count(stmt.varName)) {
-            addError("undeclared variable '" + stmt.varName + "'",
+            addError("необъявленная переменная '" + stmt.varName + "'",
                      stmt.line, stmt.col);
         }
         break;
@@ -117,7 +117,7 @@ std::string SemanticAnalyzer::analyzeExpr(Expr& expr) {
     case ExprKind::VarRef: {
         auto it = symbols_.find(expr.name);
         if (it == symbols_.end()) {
-            addError("undeclared variable '" + expr.name + "'",
+            addError("необъявленная переменная '" + expr.name + "'",
                      expr.line, expr.col);
             return "";
         }
@@ -128,7 +128,7 @@ std::string SemanticAnalyzer::analyzeExpr(Expr& expr) {
         std::string opType = analyzeExpr(*expr.operand);
         if (expr.name == "-") {
             if (!opType.empty() && opType != "int") {
-                addError("unary '-' requires int operand, got '" + opType + "'",
+                addError("унарный '-' требует операнд типа int, получен '" + opType + "'",
                          expr.line, expr.col);
             }
             return "int";
@@ -148,10 +148,10 @@ std::string SemanticAnalyzer::analyzeExpr(Expr& expr) {
         // Arithmetic operators
         if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%") {
             if (!lType.empty() && lType != "int")
-                addError("arithmetic operator '" + op + "' requires int operands, got '" + lType + "'",
+                addError("арифметический оператор '" + op + "' требует операнды int, получен '" + lType + "'",
                          expr.line, expr.col);
             if (!rType.empty() && rType != "int")
-                addError("arithmetic operator '" + op + "' requires int operands, got '" + rType + "'",
+                addError("арифметический оператор '" + op + "' требует операнды int, получен '" + rType + "'",
                          expr.line, expr.col);
             return "int";
         }
@@ -159,10 +159,10 @@ std::string SemanticAnalyzer::analyzeExpr(Expr& expr) {
         // Bitwise operators (individual task)
         if (op == "&" || op == "|" || op == "^") {
             if (!lType.empty() && lType != "int")
-                addError("bitwise operator '" + op + "' requires int operands, got '" + lType + "'",
+                addError("побитовый оператор '" + op + "' требует операнды int, получен '" + lType + "'",
                          expr.line, expr.col);
             if (!rType.empty() && rType != "int")
-                addError("bitwise operator '" + op + "' requires int operands, got '" + rType + "'",
+                addError("побитовый оператор '" + op + "' требует операнды int, получен '" + rType + "'",
                          expr.line, expr.col);
             return "int";
         }
@@ -170,10 +170,10 @@ std::string SemanticAnalyzer::analyzeExpr(Expr& expr) {
         // Relational operators
         if (op == "<" || op == "<=" || op == ">" || op == ">=") {
             if (!lType.empty() && lType != "int")
-                addError("relational operator '" + op + "' requires int operands, got '" + lType + "'",
+                addError("оператор сравнения '" + op + "' требует операнды int, получен '" + lType + "'",
                          expr.line, expr.col);
             if (!rType.empty() && rType != "int")
-                addError("relational operator '" + op + "' requires int operands, got '" + rType + "'",
+                addError("оператор сравнения '" + op + "' требует операнды int, получен '" + rType + "'",
                          expr.line, expr.col);
             return "bool";
         }
@@ -184,8 +184,8 @@ std::string SemanticAnalyzer::analyzeExpr(Expr& expr) {
                 // Allow bool/int comparison
                 if (!((lType == "int" && rType == "bool") ||
                       (lType == "bool" && rType == "int"))) {
-                    addError("equality operator '" + op + "': type mismatch '" +
-                             lType + "' vs '" + rType + "'",
+                    addError("оператор равенства '" + op + "': несовпадение типов '" +
+                             lType + "' и '" + rType + "'",
                              expr.line, expr.col);
                 }
             }
