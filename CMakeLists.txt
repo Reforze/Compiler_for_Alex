@@ -13,10 +13,10 @@ endif()
 
 add_executable(alexc
     main.cpp
-    lexer.cpp
-    parser.cpp
-    semantic.cpp
-    codegen.cpp
+    Lexer/lexer.cpp
+    Parser/parser.cpp
+    Semantic/semantic.cpp
+    CodeGen/codegen.cpp
 )
 
 target_include_directories(alexc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

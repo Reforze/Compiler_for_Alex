@@ -1,5 +1,5 @@
 #pragma once
-#include "token.h"
+#include "../Lexer/token.h"
 #include "ast.h"
 #include <vector>
 #include <string>

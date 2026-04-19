@@ -1,10 +1,10 @@
 #include "common.h"
-#include "token.h"
-#include "lexer.h"
-#include "ast.h"
-#include "parser.h"
-#include "semantic.h"
-#include "codegen.h"
+#include "Lexer/token.h"
+#include "Lexer/lexer.h"
+#include "Parser/ast.h"
+#include "Parser/parser.h"
+#include "Semantic/semantic.h"
+#include "CodeGen/codegen.h"
 
 #include <iostream>
 #include <fstream>

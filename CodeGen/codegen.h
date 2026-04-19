@@ -1,5 +1,5 @@
 #pragma once
-#include "ast.h"
+#include "../Parser/ast.h"
 #include <string>
 #include <vector>
 #include <unordered_map>

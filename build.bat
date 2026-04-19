@@ -17,7 +17,7 @@ cd /d C:\University\Programmer\Compailer_for_Alex
 
 "%CL_EXE%" /std:c++17 /EHsc /W3 ^
     /I"%MSVC_INC%" /I"%UC_INC%" /I"%SH_INC%" /I"%UM_INC%" ^
-    main.cpp lexer.cpp parser.cpp semantic.cpp codegen.cpp ^
+    main.cpp Lexer/lexer.cpp Parser/parser.cpp Semantic/semantic.cpp CodeGen/codegen.cpp ^
     /Fe:alexc.exe ^
     /link /LIBPATH:"%MSVC_LIB%" /LIBPATH:"%UCRT_LIB%" /LIBPATH:"%UM_LIB%"
 

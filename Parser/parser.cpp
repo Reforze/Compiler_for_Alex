@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "common.h"
+#include "../common.h"
 #include <stdexcept>
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
