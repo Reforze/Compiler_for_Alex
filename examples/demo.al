@@ -1,7 +1,5 @@
-// AlexLang demo program
-// Demonstrates: int arithmetic, while loop, char, bool, if/else, bitwise ops
 
-// ── 1. Factorial with while loop ────────────────────────────────────────────
+// ── 1. Факториал в  while
 int n = 5;
 int result = 1;
 int i = 1;
@@ -9,10 +7,9 @@ while (i <= n) {
     result = result * i;
     i = i + 1;
 }
-// Print factorial of 5 (should be 120)
+
 print(result);
 
-// ── 2. Char variable and print ───────────────────────────────────────────────
 char letter = 'A';
 print(letter);
 
@@ -26,17 +23,15 @@ if (flag) {
 }
 print(val);
 
-// ── 4. Bitwise operations ─────────────────────────────────────────────────────
 int a = 12;   // binary: 1100
 int b = 10;   // binary: 1010
 print(a & b); // AND  = 1000 = 8
 print(a | b); // OR   = 1110 = 14
 print(a ^ b); // XOR  = 0110 = 6
 
-// ── 5. Sum with while loop ────────────────────────────────────────────────────
 int sum = 0;
 int k = 1;
-while (k <= 10) {
+while (k  10) {
     sum = sum + k;
     k = k + 1;
 }
