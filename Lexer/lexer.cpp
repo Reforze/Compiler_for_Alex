@@ -19,8 +19,8 @@ char Lexer::advance() {
 }
 
 void Lexer::addError(const std::string& msg) {
-    errors.push_back("[" + std::to_string(line_) + ":" + std::to_string(col_) +
-                     "] Лексическая ошибка: " + msg);
+    errors.push_back("строка " + std::to_string(line_) + ", столбец " + std::to_string(col_) +
+                     ": Лексическая ошибка: " + msg);
 }
 
 void Lexer::skipWhitespaceAndComments() {
@@ -45,8 +45,8 @@ void Lexer::skipWhitespaceAndComments() {
                 advance();
             }
             if (!closed) {
-                errors.push_back("[" + std::to_string(startLine) + ":" + std::to_string(startCol) +
-                                 "] Лексическая ошибка: незакрытый блочный комментарий");
+                errors.push_back("строка " + std::to_string(startLine) + ", столбец " + std::to_string(startCol) +
+                                 ": Лексическая ошибка: незакрытый блочный комментарий");
             }
         } else {
             break;

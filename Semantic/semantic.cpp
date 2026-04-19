@@ -4,8 +4,8 @@
 SemanticAnalyzer::SemanticAnalyzer() {}
 
 void SemanticAnalyzer::addError(const std::string& msg, int line, int col) {
-    errors.push_back("[" + std::to_string(line) + ":" + std::to_string(col) +
-                     "] Семантическая ошибка: " + msg);
+    errors.push_back("строка " + std::to_string(line) + ", столбец " + std::to_string(col) +
+                     ": Семантическая ошибка: " + msg);
 }
 
 void SemanticAnalyzer::analyze(ProgramNode& prog) {

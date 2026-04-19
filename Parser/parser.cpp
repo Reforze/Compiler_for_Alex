@@ -41,8 +41,8 @@ Token Parser::consume(TokenKind k, const std::string& what) {
 }
 
 void Parser::addError(const std::string& msg) {
-    errors.push_back("[" + std::to_string(current().line) + ":" + std::to_string(current().col) +
-                     "] Синтаксическая ошибка: " + msg);
+    errors.push_back("строка " + std::to_string(current().line) + ", столбец " + std::to_string(current().col) +
+                     ": Синтаксическая ошибка: " + msg);
 }
 
 void Parser::synchronize() {
